@@ -1,0 +1,40 @@
+<div style="display: table">
+  <div class="tableRow">
+    <label class="tableCell">Search string</label>
+    <mat-form-field class="tableCell form">
+      <input matInput type="text" name="search" [(ngModel)]="search">
+    </mat-form-field>
+  </div>
+  <div class="tableRow">
+    <label class="tableCell">Max number of rows</label>
+    <mat-form-field class="tableCell form">
+      <input matInput type="number" name="maxNumRows" [(ngModel)]="maxNumRows" min="0" max="50">
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="tableCell"
+      (click)="getNewResults(maxNumRows, search)">Search</button>
+
+  </div><br>
+</div>
+<div *ngIf="show">
+  <div style="float: right">
+    <span>Number of rows to show:</span>
+    <mat-form-field class="form-cell" style="float: right">
+      <mat-select name="numRows" [(ngModel)]="numRows" (ngModelChange)="numRowsChanged()">
+        <mat-option *ngFor="let count of numRowsArray" [value]="count" [disabled]="count > maxNumRows">{{ count }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div style="width: 100%; vertical-align: middle;"
+    [class]="numRows >= 10 ? (numRows >= 20? 'height800' :'height500'): 'height300'">
+    <ag-grid-angular #agGrid style="width: 100%; height: 100%;" class="ag-theme-balham" [gridOptions]="gridOptions"
+      rowHeight="50" [suppressRowClickSelection]="true" rowSelection="multiple" [enableRangeSelection]="true"
+      [pagination]="true" [paginationPageSize]="maxNumRows" [autoGroupColumnDef]="autoGroupColumnDef"
+      [paginationNumberFormatter]="paginationNumberFormatter" [defaultColDef]="defaultColDef" [statusBar]="statusBar"
+      [getContextMenuItems]="getContextMenuItems" (gridReady)="onGridReady($event)" [rowData]="gridOptions.rowData">
+    </ag-grid-angular>
+  </div>
+  <br>
+  <button mat-raised-button color="primary" (click)="getSelectedRows()">Get Selected Rows</button>
+</div>
+<a id="downloadAnchorElem" style="display:none"></a>

@@ -1,0 +1,41 @@
+.height300 {
+    height: 325px;
+    clear: both;
+}
+
+.height500 {
+    height: 525px;
+    clear: both;
+}
+
+.height800 {
+    height: 725px;
+    clear: both;
+}
+
+label {
+    width: 200px;
+    padding: 0px 10px;
+}
+
+.form {
+    border-bottom: 0.8px solid black;
+}
+
+.tableRow {
+    vertical-align: middle;
+    text-align: left;
+    display: table-row;
+    height: 40px;
+}
+
+.tableCell {
+    vertical-align: middle;
+    margin-left: 10px;
+    display: table-cell;
+}
+
+.form-cell {
+    width: 50px;
+    margin-left: 10px;
+}
