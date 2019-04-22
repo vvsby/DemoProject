@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { MyGridApplicationComponent } from './my-grid-application/my-grid-application.component';
+import { GridService } from './services/grid.service';
 import { RedComponentComponent } from './my-grid-application/red-component/red-component.component';
 import { ShowImgComponent } from './my-grid-application/show-img-component/show-img-component.component';
 import { MatCheckboxComponent } from './my-grid-application/mat-checkbox/mat-checkbox.component';
@@ -101,6 +102,7 @@ import { DateParseComponent } from './my-grid-application/date-parse/date-parse.
     )
   ],
   providers: [
+    GridService
   ],
   bootstrap: [AppComponent]
 })

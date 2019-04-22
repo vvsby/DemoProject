@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GridOptions } from 'ag-grid-community';
-import { RedComponentComponent } from './red-component/red-component.component';
-import { MatCheckboxComponent } from './mat-checkbox/mat-checkbox.component';
-import { ShowImgComponent } from './show-img-component/show-img-component.component';
-import { DateParseComponent } from './date-parse/date-parse.component';
 import { HttpClient } from '@angular/common/http';
-import * as Classes from '../classes/classes';
+import { GridOptions, ColumnApi } from 'ag-grid-community';
 import { AgGridNg2 } from 'ag-grid-angular';
+
+import { GridService } from '../services/grid.service';
+
+import * as Classes from '../classes/classes';
 
 @Component({
   selector: 'app-my-grid-application',
@@ -16,21 +15,22 @@ import { AgGridNg2 } from 'ag-grid-angular';
 export class MyGridApplicationComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridNg2;
   private gridOptions: GridOptions;
-  paginationNumberFormatter;
-  autoGroupColumnDef;
-  pinnedBottomRowData;
-  defaultColDef;
-  gridColumnApi;
-  statusBar;
-  searchList: Classes.SearchList;
-  show = false;
-  search = 'john';
-  maxNumRows = 50;
-  numRows = 10;
-  numRowsArray = [3, 5, 10, 20, 50];
+  private paginationNumberFormatter; // function
+  private autoGroupColumnDef: Classes.GroupColumnDef;
+  private pinnedBottomRowData; // function
+  private defaultColDef: Classes.ColumnDefinition;
+  private gridColumnApi: ColumnApi;
+  private statusBar: Classes.StatusBar;
+  private searchList: Classes.SearchList;
+  private show = false;
+  private search = 'john';
+  private maxNumRows = 50;
+  private numRows = 10;
+  private numRowsArray = [3, 5, 10, 20, 50];
 
   constructor(
-    public http: HttpClient) {
+    public http: HttpClient,
+    public gridService: GridService) {
     this.gridOptions = <GridOptions>{};
   }
   ngOnInit() {
@@ -66,10 +66,10 @@ export class MyGridApplicationComponent implements OnInit {
     if (numRows < 0 || numRows > 50) {
       alert('Invalid value ' + numRows + '. Max number of rows must be within the range: [0, 50]');
     } else {
-      this.http.get(this.getPath(numRows, searchWord))
+      this.gridService.sendRequest(numRows, searchWord)
         .subscribe((res: Classes.SearchList) => {
           this.searchList = new Classes.SearchList(res);
-          this.showTable(this.searchList, this.numRows);
+          this.showTable(this.searchList, numRows);
         });
     }
 
@@ -80,106 +80,14 @@ export class MyGridApplicationComponent implements OnInit {
    * @param maxRows max number of rows in result
    */
   showTable(searchList: Classes.SearchList, maxRows?: number) {
-    const rowData: Classes.RowData[] = [];
-    searchList.items.forEach(item => {
-      const row = new Classes.RowData();
-      row.description = item.snippet.description;
-      row.publishedAt = item.snippet.publishedAt;
-      row.thumbnails = item.snippet.thumbnails;
-      row.title = item;
-      row.selected = false;
-      rowData.push(row);
-    });
-    this.autoGroupColumnDef = {
-      headerName: 'Group',
-      width: 200,
-      field: 'athlete',
-      valueGetter: (params) => {
-        if (params.node.group) {
-          return params.node.key;
-        } else {
-          return params.data[params.colDef.field];
-        }
-      },
-      headerCheckboxSelection: true,
-      cellRenderer: 'agGroupCellRenderer',
-      cellRendererParams: { checkbox: true }
-    };
+    this.autoGroupColumnDef = this.gridService.getAutoGroupColumnDef();
     this.gridOptions = <GridOptions>{};
-    this.gridOptions.columnDefs = [
-      {
-        headerName: '',
-        field: 'selected',
-        sortable: true,
-        checkboxSelection: (params) => {
-          return params.columnApi.getRowGroupColumns().length === 0;
-        },
-        headerCheckboxSelection: (params) => {
-          return params.columnApi.getRowGroupColumns().length === 0;
-        },
-        cellRendererFramework: MatCheckboxComponent,
-        width: 40
-      },
-      {
-        headerName: '',
-        field: 'thumbnails.default.url',
-        cellRendererFramework: ShowImgComponent,
-        width: 100
-      },
-      {
-        headerName: 'Description',
-        field: 'description',
-        resizable: true,
-        sortable: true,
-        menuTabs: ['filterMenuTab', 'generalMenuTab'],
-        width: window.innerWidth * 0.3
-      },
-      {
-        headerName: 'Published on',
-        field: 'publishedAt',
-        resizable: true,
-        sortable: true,
-        cellRendererFramework: DateParseComponent,
-        width: 150
-      },
-      {
-        headerName: 'Video Title',
-        field: 'title',
-        resizable: true,
-        cellRendererFramework: RedComponentComponent,
-        width: window.innerWidth * 0.3,
-
-      },
-
-    ];
-    this.defaultColDef = {
-      sortable: true,
-      filter: true,
-    };
-    this.statusBar = {
-      statusPanels: [
-        {
-          statusPanel: 'agTotalRowCountComponent',
-          align: 'left'
-        },
-        { statusPanel: 'agFilteredRowCountComponent' },
-        { statusPanel: 'agSelectedRowCountComponent' },
-        { statusPanel: 'agAggregationComponent' }
-      ]
-    };
-    this.gridOptions.rowData = rowData;
+    this.gridOptions.columnDefs = this.gridService.generateColumnDefs();
+    this.defaultColDef = this.gridService.getDefaultColDef();
+    this.statusBar = this.gridService.getStatusBar();
+    this.gridOptions.rowData = this.gridService.getRowData(searchList);
     this.show = true;
 
-  }
-  /**
-   * return path to search api
-   * @param numRows max number of rows in result
-   * @param searchWord search query
-   */
-  getPath(numRows = 10, searchWord = '') {
-    const path = 'https://www.googleapis.com/youtube/v3/search?key=AIzaSyDOfT_BO81aEZScosfTYMruJobmpjqNeEk&maxResults=' +
-      numRows + '&type=video&part=snippet&q=' + searchWord;
-    return path;
   }
   /**
    * update number of rows per page
@@ -188,39 +96,7 @@ export class MyGridApplicationComponent implements OnInit {
     this.agGrid.api.paginationSetPageSize(Number(this.numRows));
     setTimeout(this.showTable.bind(this), 0, this.searchList, this.numRows);
   }
-  /**
-   * return menu array
-   * @param params input parameter
-   */
-  getContextMenuItems(params) {
-    let result: any[] = [
-      'copy',
-      'copyWithHeaders',
-      'paste'
-    ];
-    if (params.column.colId === 'title') {
-      result = [{
-        name: 'Open in new tab',
-        action: () => {
-          let link;
-          link = 'https://www.youtube.com/watch?v=' + params.value.id.videoId;
-          window.open(link);
-
-        }
-      },
-        'separator'].concat(result);
-    } else if (params.column.colId === 'thumbnails.default.url') {
-      result = [{
-        name: 'Open image in new tab',
-        action: () => {
-          let link;
-          link = params.node.data.thumbnails.high.url;
-          window.open(link);
-
-        }
-      },
-        'separator'].concat(result);
-    }
-    return result;
+  getContextMenuItems() {
+    return this.gridService.getContextMenuItems;
   }
 }

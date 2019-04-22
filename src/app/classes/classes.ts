@@ -38,6 +38,59 @@ export class Item {
         this.snippet = _get('snippet', obj);
     }
 }
+
+export class ColumnDefinition {
+    sortable: boolean;
+    filter: boolean;
+    constructor(obj?: any) {
+        this.sortable = _get('sortable', obj);
+        this.filter = _get('filter', obj);
+    }
+}
+
+export class StatusPanels {
+    statusPanel?: string;
+    align?: string;
+    constructor(obj?: any) {
+        this.statusPanel = _get('statusPanel', obj);
+        this.align = _get('align', obj);
+    }
+}
+export class GroupColumnDef {
+    headerName?: string;
+    width?: number;
+    field?: string;
+    valueGetter?: any; // function
+    headerCheckboxSelection?: any; // function
+    resizable?: boolean;
+    sortable?: boolean;
+    cellRenderer?: string;
+    cellRendererParams?: { checkbox: boolean };
+    cellRendererFramework?: any;
+    menuTabs?: string[];
+    checkboxSelection?: any; // function
+    constructor(obj?: any) {
+        this.headerName = _get('headerName', obj);
+        this.width = _get('width', obj);
+        this.field = _get('field', obj);
+        this.resizable = _get('resizable', obj);
+        this.sortable = _get('sortable', obj);
+        this.valueGetter = _get('valueGetter', obj);
+        this.headerCheckboxSelection = _get('headerCheckboxSelection', obj);
+        this.cellRenderer = _get('cellRenderer', obj);
+        this.cellRendererParams = _get('cellRendererParams', obj);
+        this.menuTabs = _getArray('menuTabs', obj);
+        this.cellRendererFramework = _get('cellRendererFramework', obj);
+    }
+}
+
+export class StatusBar {
+    statusPanels?: StatusPanels[];
+    constructor(obj?: any) {
+        this.statusPanels = _getArray('statusPanels', obj);
+    }
+}
+
 export class ItemId {
     kind: string;
     videoId: string;
