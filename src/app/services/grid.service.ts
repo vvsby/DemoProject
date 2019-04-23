@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GridOptions } from 'ag-grid-community';
+import { GridOptions, RowNode } from 'ag-grid-community';
 import { AgGridNg2 } from 'ag-grid-angular';
 import { HttpClient } from '@angular/common/http';
 
@@ -187,6 +187,17 @@ export class GridService {
      */
     sendRequest(numRows: number, searchWord: string) {
         return this.http.get(this.getPath(numRows, searchWord));
+    }
+    /**
+    * Function for creating JSON file with selected rows
+    */
+    getSelectedRows(selectedNodes: RowNode[]) {
+        const selectedData = selectedNodes.map(node => node.data);
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(selectedData, null, '\t'));
+        const dlAnchorElem = document.getElementById('downloadAnchorElem');
+        dlAnchorElem.setAttribute('href', dataStr);
+        dlAnchorElem.setAttribute('download', 'selected-rows.json');
+        dlAnchorElem.click();
     }
 
 }

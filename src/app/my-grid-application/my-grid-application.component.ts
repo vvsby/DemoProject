@@ -49,12 +49,7 @@ export class MyGridApplicationComponent implements OnInit {
   */
   getSelectedRows() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
-    const selectedData = selectedNodes.map(node => node.data);
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(selectedData, null, '\t'));
-    const dlAnchorElem = document.getElementById('downloadAnchorElem');
-    dlAnchorElem.setAttribute('href', dataStr);
-    dlAnchorElem.setAttribute('download', 'scene.json');
-    dlAnchorElem.click();
+    this.gridService.getSelectedRows(selectedNodes);
   }
   /**
    * Refresh search results
