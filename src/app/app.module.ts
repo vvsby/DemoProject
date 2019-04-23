@@ -45,6 +45,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DateParseComponent } from './my-grid-application/date-parse/date-parse.component';
+import { YoutubePlayerComponent } from './services/youtube-player/youtube-player.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { DateParseComponent } from './my-grid-application/date-parse/date-parse.
     VideoTitleComponent,
     ShowImgComponent,
     MatCheckboxComponent,
-    DateParseComponent
+    DateParseComponent,
+    YoutubePlayerComponent
   ],
   imports: [
     BrowserModule,
@@ -104,6 +106,9 @@ import { DateParseComponent } from './my-grid-application/date-parse/date-parse.
   providers: [
     GridService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    YoutubePlayerComponent
+  ]
 })
 export class AppModule { }

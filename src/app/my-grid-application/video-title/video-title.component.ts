@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
+
+import { YoutubePlayerComponent } from 'src/app/services/youtube-player/youtube-player.component';
 
 @Component({
   selector: 'app-video-title',
@@ -10,7 +13,8 @@ export class VideoTitleComponent {
   link: string;
   name: string;
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog) { }
 
   agInit(params: any): void {
     this.params = params;
@@ -18,10 +22,11 @@ export class VideoTitleComponent {
     this.name = this.params.value.snippet.title || 'No title in response :(';
   }
   openLink() {
-    window.open(this.link);
+    // window.open(this.link);
+    const dialogRef = this.dialog.open(YoutubePlayerComponent, {
+      width: '80%'
+    });
+    dialogRef.componentInstance.videoId = this.params.value.id.videoId;
   }
-
-
-
 
 }
