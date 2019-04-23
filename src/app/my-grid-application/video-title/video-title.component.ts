@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-red-component',
-  templateUrl: './red-component.component.html',
-  styleUrls: ['./red-component.component.css']
+  selector: 'app-video-title',
+  templateUrl: './video-title.component.html',
+  styleUrls: ['./video-title.component.css']
 })
-export class RedComponentComponent {
+export class VideoTitleComponent {
   private params: any;
   link: string;
   name: string;

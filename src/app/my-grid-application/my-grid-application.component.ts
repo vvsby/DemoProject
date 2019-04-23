@@ -15,9 +15,7 @@ import * as Classes from '../classes/classes';
 export class MyGridApplicationComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridNg2;
   private gridOptions: GridOptions;
-  private paginationNumberFormatter; // function
   private autoGroupColumnDef: Classes.GroupColumnDef;
-  private pinnedBottomRowData; // function
   private defaultColDef: Classes.ColumnDefinition;
   private gridColumnApi: ColumnApi;
   private statusBar: Classes.StatusBar;
@@ -35,9 +33,9 @@ export class MyGridApplicationComponent implements OnInit {
   }
   ngOnInit() {
     this.getNewResults(this.maxNumRows, 'john');
-    this.paginationNumberFormatter = (params) => {
-      return '[' + params.value.toLocaleString() + ']';
-    };
+  }
+  paginationNumberFormatter(params) {
+    return '[' + params.value.toLocaleString() + ']';
   }
   onGridReady(params) {
     this.agGrid.api.refreshCells();

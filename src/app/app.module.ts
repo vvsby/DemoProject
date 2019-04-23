@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { MyGridApplicationComponent } from './my-grid-application/my-grid-application.component';
 import { GridService } from './services/grid.service';
-import { RedComponentComponent } from './my-grid-application/red-component/red-component.component';
+import { VideoTitleComponent } from './my-grid-application/video-title/video-title.component';
 import { ShowImgComponent } from './my-grid-application/show-img-component/show-img-component.component';
 import { MatCheckboxComponent } from './my-grid-application/mat-checkbox/mat-checkbox.component';
 import {
@@ -50,7 +50,7 @@ import { DateParseComponent } from './my-grid-application/date-parse/date-parse.
   declarations: [
     AppComponent,
     MyGridApplicationComponent,
-    RedComponentComponent,
+    VideoTitleComponent,
     ShowImgComponent,
     MatCheckboxComponent,
     DateParseComponent
@@ -94,7 +94,7 @@ import { DateParseComponent } from './my-grid-application/date-parse/date-parse.
     ReactiveFormsModule,
     AgGridModule.withComponents(
       [
-        RedComponentComponent,
+        VideoTitleComponent,
         ShowImgComponent,
         MatCheckboxComponent,
         DateParseComponent

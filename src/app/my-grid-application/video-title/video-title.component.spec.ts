@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RedComponentComponent } from './red-component.component';
+import { VideoTitleComponent } from './video-title.component';
 
 describe('RedComponentComponent', () => {
-  let component: RedComponentComponent;
-  let fixture: ComponentFixture<RedComponentComponent>;
+  let component: VideoTitleComponent;
+  let fixture: ComponentFixture<VideoTitleComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RedComponentComponent ]
+      declarations: [VideoTitleComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RedComponentComponent);
+    fixture = TestBed.createComponent(VideoTitleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

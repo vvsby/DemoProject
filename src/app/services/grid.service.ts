@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GridOptions, RowNode } from 'ag-grid-community';
-import { AgGridNg2 } from 'ag-grid-angular';
+import { RowNode } from 'ag-grid-community';
 import { HttpClient } from '@angular/common/http';
 
 import { MatCheckboxComponent } from '../my-grid-application/mat-checkbox/mat-checkbox.component';
 import { ShowImgComponent } from '../my-grid-application/show-img-component/show-img-component.component';
 import { DateParseComponent } from '../my-grid-application/date-parse/date-parse.component';
-import { RedComponentComponent } from '../my-grid-application/red-component/red-component.component';
+import { VideoTitleComponent } from '../my-grid-application/video-title/video-title.component';
 
 import * as Classes from '../classes/classes';
 
@@ -60,7 +59,7 @@ export class GridService {
                 headerName: 'Video Title',
                 field: 'title',
                 resizable: true,
-                cellRendererFramework: RedComponentComponent,
+                cellRendererFramework: VideoTitleComponent,
                 width: window.innerWidth * 0.3,
 
             },
